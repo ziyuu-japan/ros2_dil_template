@@ -1,6 +1,8 @@
 #include <rclcpp/rclcpp.hpp>
 #include <geometry_msgs/msg/pose.hpp>
 
+#include <practice/prac_lib/prac_lib.hpp>
+
 namespace project_dil {
 
 class ROS2Template : public rclcpp::Node {
@@ -19,6 +21,9 @@ private:
 
   // Publisherの登録
   rclcpp::Publisher<geometry_msgs::msg::Pose>::SharedPtr pub_pose_;
+
+  // ライブラリのインスタンス化
+  practice::PracLib prac_lib_;
 };
 
 ROS2Template:: ROS2Template(): Node("dil_template"){
@@ -48,25 +53,10 @@ void ROS2Template::run(){
   rclcpp::WallRate loop_rate(30);
 
   while(rclcpp::ok()){
-    geometry_msgs::msg::Pose pose;
-    
-    // 前方
-    pose.position.x = 1.0;
-    pose.position.y = 0.0;
 
-    // // 右前方
-    // pose.position.x = 1.0;
-    // pose.position.y = -0.5;
+    prac_lib_.sum(1, 2);
 
-    // // 左前方
-    // pose.position.x = 1.0;
-    // pose.position.y = 0.5;
-    
-    // // 停止
-    // pose.position.x = 0.0;
-    // pose.position.y = 0.0;
-
-    pub_pose_->publish(pose);
+    RCLCPP_INFO_STREAM(this->get_logger(), "result: " << prac_lib_.member_);
 
     // 一定周期にするためのウェイト
     loop_rate.sleep();

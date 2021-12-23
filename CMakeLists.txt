@@ -22,12 +22,14 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(geometry_msgs REQUIRED)
 
-set(NODES template;)
+set(NODES template;sample)
 foreach(target IN LISTS NODES)
   # 実行ファイルの生成
   add_executable(${target} src/${target}.cpp)
   # 依存パッケージの登録
   ament_target_dependencies(${target} rclcpp geometry_msgs)
+  # 依存ライブラリのリンク
+  target_link_libraries(${target} prac_lib)
   # 実行ファイルの設置
   install(TARGETS ${target} DESTINATION lib/${PROJECT_NAME})
 endforeach()
